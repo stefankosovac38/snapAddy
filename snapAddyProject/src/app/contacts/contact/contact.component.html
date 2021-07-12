@@ -1,4 +1,6 @@
-<div>
-  <span> {{ firstName }} {{ lastName }}</span>
+<div class="contact" (click)="onClick()">
+  <div class="name-section">
+    <span> {{ firstName }} {{ lastName }}</span>
+  </div>
+  <div class="company-section">{{ company }}</div>
 </div>
-<div>{{ company }}</div>

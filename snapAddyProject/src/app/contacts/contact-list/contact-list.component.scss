@@ -1,0 +1,15 @@
+.contact-list {
+  .contact-list-option {
+    margin: 10px 0;
+    box-sizing: border-box;
+  }
+}
+:host::ng-deep {
+  .contact-list .mat-list-content {
+    height: 100%;
+  }
+  .contact {
+    padding: 10px;
+    box-sizing: border-box;
+  }
+}

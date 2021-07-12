@@ -1,11 +1,17 @@
-<mat-selection-list>
-  <mat-list-option checkboxPosition="before" *ngFor="let item of items">
-    <app-contact
-      [id]="item.id"
-      [firstName]="item.firstName ? item.firstName : 'No'"
-      [lastName]="item.lastName ? item.lastName : 'Name'"
-      [company]="item.organization"
-    >
-    </app-contact>
+<mat-selection-list class="contact-list">
+  <mat-list-option
+    class="contact-list-option"
+    *ngFor="let item of items"
+    checkboxPosition="before"
+  >
+    <div class="list-item" (click)="onClick($event)">
+      <app-contact
+        [id]="item.id"
+        [firstName]="item.firstName ? item.firstName : 'No'"
+        [lastName]="item.lastName ? item.lastName : 'Name'"
+        [company]="item.organization"
+      >
+      </app-contact>
+    </div>
   </mat-list-option>
 </mat-selection-list>

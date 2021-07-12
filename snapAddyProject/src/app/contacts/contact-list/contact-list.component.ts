@@ -13,5 +13,8 @@ export class ContactListComponent implements OnInit {
 
   constructor() {}
 
+  onClick(event: any) {
+    event.stopPropagation();
+  }
   ngOnInit(): void {}
 }

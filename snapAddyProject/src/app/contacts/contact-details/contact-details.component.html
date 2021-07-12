@@ -1,1 +1,7 @@
-<p>contact-details works!</p>
+<app-input
+  *ngFor="let key of objectKeys"
+  [name]="key"
+  [value]="contactDetails![key]"
+  [type]="inputHelper.calculateType(contactDetails![key])"
+  (valueChanged)="onValueChanged($event)"
+></app-input>

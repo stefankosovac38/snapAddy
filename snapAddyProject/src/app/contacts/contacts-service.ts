@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Subject, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import { Contact } from './contact-list/contact.model';
 import { Injectable } from '@angular/core';
@@ -48,7 +48,8 @@ export class ContactsService {
     customFields: {},
     drawing: undefined,
   };
-  contactsChanged = new Subject<string>();
+  contactsChanged$ = new Subject<string>();
+  contactDetail$ = new Subject<Contact>();
   constructor(private http: HttpClient) {}
 
   getContacts() {
@@ -81,8 +82,8 @@ export class ContactsService {
         })
       );
   }
-  getContact(contactId: number) {
-    return this.http
+  getContact(contactId: string) {
+    this.http
       .get<Contact>(
         `https://api.snapaddy.com/grabber/v1/contactitem/${contactId}`,
         {
@@ -97,7 +98,10 @@ export class ContactsService {
         catchError((errorRes) => {
           return throwError(errorRes);
         })
-      );
+      )
+      .subscribe((response) => {
+        return this.contactDetail$.next(response);
+      });
   }
   addContact() {
     this.http
@@ -117,11 +121,31 @@ export class ContactsService {
           return throwError(errorRes);
         })
       )
-      .subscribe(() => this.contactsChanged.next());
+      .subscribe(() => this.contactsChanged$.next());
   }
-  updateContact(contactId: number) {
-    return this.http
+  updateContact(contactId: string, payload: Contact) {
+    this.http
       .put<Contact>(
+        `https://api.snapaddy.com/grabber/v1/contactitem/${contactId}`,
+        payload,
+        {
+          headers: new HttpHeaders({
+            'X-API-Token': this.token,
+          }),
+          responseType: 'json',
+        }
+      )
+      .pipe(
+        map((responseData) => responseData),
+        catchError((errorRes) => {
+          return throwError(errorRes);
+        })
+      )
+      .subscribe(() => this.contactsChanged$.next());
+  }
+  deleteContact(contactId: string) {
+    this.http
+      .delete<Contact>(
         `https://api.snapaddy.com/grabber/v1/contactitem/${contactId}`,
         {
           headers: new HttpHeaders({
@@ -135,24 +159,7 @@ export class ContactsService {
         catchError((errorRes) => {
           return throwError(errorRes);
         })
-      );
-  }
-  deleteContact(contactId: number) {
-    return this.http
-      .put<Contact>(
-        `https://api.snapaddy.com/grabber/v1/contactitem/${contactId}`,
-        {
-          headers: new HttpHeaders({
-            'X-API-Token': this.token,
-          }),
-          responseType: 'json',
-        }
       )
-      .pipe(
-        map((responseData) => responseData),
-        catchError((errorRes) => {
-          return throwError(errorRes);
-        })
-      );
+      .subscribe(() => this.contactsChanged$.next());
   }
 }

@@ -1,2 +1,17 @@
-<button mat-raised-button (click)="addNewContact()">New</button>
-<app-contact-list [items]="contacts"> </app-contact-list>
+<app-flex-layout>
+  <div class="left-section">
+    <button mat-raised-button (click)="addNewContact()">New</button>
+    <button
+      [disabled]="selectedContact ? false : true"
+      mat-raised-button
+      (click)="deleteContact(selectedContact!)"
+    >
+      Delete
+    </button>
+    <app-contact-list *ngIf="loaded === true" [items]="contacts">
+    </app-contact-list>
+  </div>
+  <div class="right-section">
+    <app-contact-details> </app-contact-details>
+  </div>
+</app-flex-layout>

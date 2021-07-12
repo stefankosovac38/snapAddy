@@ -1,5 +1,33 @@
-**ngIf="[type]==='input'"
-<mat-form-field appearance="fill">
-  <mat-label>Input</mat-label>
-  <input matInput />
+<mat-form-field *ngIf="type === 'text'">
+  <mat-label>{{ inputLabel }}</mat-label>
+  <input
+    #input
+    (focusout)="onFocusOut()"
+    [value]="value"
+    matInput
+    name="name"
+  />
+</mat-form-field>
+<mat-form-field *ngIf="type === 'number'">
+  <mat-select (selectionChange)="onSelectFocusOut($event.value)" name="name">
+    <mat-option #select *ngFor="let option of optionValues" [value]="value">{{
+      option.name
+    }}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field *ngIf="type === 'date'">
+  <mat-label>{{ inputLabel }}</mat-label>
+  <!-- #docregion toggle -->
+  <input
+    matInput
+    #input
+    (focusout)="onFocusOut()"
+    name="name"
+    [value]="value"
+    [matDatepicker]="picker"
+  />
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+  <!-- #enddocregion toggle -->
 </mat-form-field>

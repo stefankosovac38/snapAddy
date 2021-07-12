@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+import { ContactsService } from '../contacts-service';
+
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
@@ -16,7 +18,12 @@ export class ContactComponent implements OnInit {
   lastName?: string = undefined;
   @Input()
   company?: string = undefined;
-  constructor() {}
+
+  constructor(private contactsService: ContactsService) {}
+
+  onClick() {
+    this.contactsService.getContact(this.id!);
+  }
 
   ngOnInit(): void {}
 }

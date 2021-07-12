@@ -1,4 +1,5 @@
 export interface Contact {
+  [key: string]: any;
   attachments: string[];
   id?: string;
   firstName?: string;
