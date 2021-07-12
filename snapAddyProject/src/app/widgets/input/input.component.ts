@@ -52,6 +52,7 @@ export class InputComponent implements OnInit {
       : '';
   }
   onSelectFocusOut(value: any) {
+    console.log('selectValue', this.select.value);
     this.valueChanged.emit({
       name: this.name,
       value: value,

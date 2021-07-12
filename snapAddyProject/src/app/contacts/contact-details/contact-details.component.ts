@@ -33,6 +33,7 @@ export class ContactDetailsComponent implements OnInit, OnDestroy {
   get objectKeys() {
     return this.contactDetails !== undefined
       ? [
+          'gender',
           'title',
           'firstName',
           'lastName',
