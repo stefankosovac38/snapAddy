@@ -1,8 +1,10 @@
-<mat-selection-list class="contact-list">
+<mat-selection-list #list class="contact-list">
   <mat-list-option
+    [id]="i"
     class="contact-list-option"
-    *ngFor="let item of items"
+    *ngFor="let item of items; index as i"
     checkboxPosition="before"
+    [value]="item"
   >
     <div class="list-item" (click)="onClick($event)">
       <app-contact

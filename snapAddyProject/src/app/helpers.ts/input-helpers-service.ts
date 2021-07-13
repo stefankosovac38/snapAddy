@@ -1,7 +1,12 @@
 import { Injectable, Input } from '@angular/core';
 
+export interface Label {
+  [key: string]: any;
+  gender: 'Salutation';
+}
 @Injectable({ providedIn: 'root' })
 export class InputHelpersService {
+  labels: Label = { gender: 'Salutation' };
   calculateType(value: any) {
     if (isNaN(value) && this.isDate(value)) {
       return 'date';
@@ -17,5 +22,8 @@ export class InputHelpersService {
   isDate(value: string) {
     const date = Date.parse(value);
     return !isNaN(date);
+  }
+  getLabels(value: string) {
+    return this.labels[value];
   }
 }

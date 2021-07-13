@@ -40,7 +40,9 @@ export class InputComponent implements OnInit {
 
   get inputLabel() {
     const { label, name, inputHelpersService } = this;
-    return label ? label : inputHelpersService.capitalize(name);
+    return label && label.length > 0
+      ? label
+      : inputHelpersService.capitalize(name);
   }
   onFocusOut() {
     const { value, name, input } = this;
@@ -52,7 +54,6 @@ export class InputComponent implements OnInit {
       : '';
   }
   onSelectFocusOut(value: any) {
-    console.log('selectValue', this.select.value);
     this.valueChanged.emit({
       name: this.name,
       value: value,

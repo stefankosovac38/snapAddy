@@ -2,13 +2,24 @@
   <div class="left-section">
     <button mat-raised-button (click)="addNewContact()">New</button>
     <button
-      [disabled]="selectedContact ? false : true"
+      [disabled]="selectedContact || selectedContacts.length > 0 ? false : true"
       mat-raised-button
-      (click)="deleteContact(selectedContact!)"
+      (click)="deleteContact()"
     >
       Delete
     </button>
-    <app-contact-list *ngIf="loaded === true" [items]="contacts">
+    <button
+      [disabled]="selectedContact || selectedContacts.length > 0 ? false : true"
+      mat-raised-button
+      (click)="exportContact()"
+    >
+      Export
+    </button>
+    <app-contact-list
+      (selectedItems)="getSelectedContacts($event)"
+      *ngIf="loaded === true"
+      [items]="contacts"
+    >
     </app-contact-list>
   </div>
   <div class="right-section">

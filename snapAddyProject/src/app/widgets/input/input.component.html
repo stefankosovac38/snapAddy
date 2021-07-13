@@ -9,6 +9,7 @@
   />
 </mat-form-field>
 <mat-form-field *ngIf="type === 'number'">
+  <mat-label>{{ inputLabel }}</mat-label>
   <mat-select
     [(value)]="value"
     (selectionChange)="onSelectFocusOut($event.value)"

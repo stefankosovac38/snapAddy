@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { Contact } from './contact-list/contact.model';
 import { ContactsService } from './contacts-service';
-import { MatSidenav } from '@angular/material/sidenav';
+import { ExportService } from '../helpers.ts/export-service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -15,22 +15,41 @@ export class ContactsComponent implements OnInit, OnDestroy {
   contacts: Contact[] = [];
   changedContacts$!: Subscription;
   loaded: boolean = false;
-  @Input()
   selectedContact?: Contact;
-  @ViewChild('sidenav', { static: false }) sideNav!: MatSidenav;
-  constructor(private contactsService: ContactsService) {}
+  selectedContacts: Contact[] = [];
+  constructor(
+    private contactsService: ContactsService,
+    private exportService: ExportService
+  ) {}
+  get selectedContact$() {
+    return this.contactsService.contactDetail$;
+  }
 
   addNewContact() {
     this.contactsService.addContact();
   }
-  deleteContact(contact: Contact) {
-    this.contactsService.deleteContact(contact.id!);
+  deleteContact() {
+    console.log('this.selectedContacts', this.selectedContacts);
+    this.selectedContacts.length > 0
+      ? this.contactsService.deleteMultipleContacts(this.selectedContacts)
+      : this.contactsService.deleteContact(this.selectedContact!.id!);
   }
   getContacts() {
     this.contactsService.getContacts().subscribe((contacts) => {
       this.contacts = contacts;
       this.loaded = true;
     });
+  }
+  getSelectedContacts(contacts: Contact[]) {
+    this.selectedContacts = contacts;
+  }
+  exportContact() {
+    this.selectedContacts.length > 0
+      ? this.exportService.exportMultipleContacts(this.selectedContacts)
+      : this.exportService.exportAsExcelFile(
+          [this.selectedContact!],
+          'snapAddy'
+        );
   }
 
   ngOnInit(): void {
@@ -43,8 +62,5 @@ export class ContactsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.changedContacts$.unsubscribe();
     this.selectedContact$.unsubscribe();
-  }
-  get selectedContact$() {
-    return this.contactsService.contactDetail$;
   }
 }

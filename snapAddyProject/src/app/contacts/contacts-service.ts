@@ -1,6 +1,11 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Subject, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+} from 'rxjs/operators';
 
 import { Contact } from './contact-list/contact.model';
 import { Injectable } from '@angular/core';
@@ -94,6 +99,8 @@ export class ContactsService {
         }
       )
       .pipe(
+        debounceTime(1000),
+        distinctUntilChanged(),
         map((responseData) => responseData),
         catchError((errorRes) => {
           return throwError(errorRes);
@@ -161,5 +168,10 @@ export class ContactsService {
         })
       )
       .subscribe(() => this.contactsChanged$.next());
+  }
+  deleteMultipleContacts(contacts: Contact[]) {
+    for (let contact of contacts) {
+      this.deleteContact(contact.id!);
+    }
   }
 }

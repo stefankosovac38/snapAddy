@@ -1,4 +1,5 @@
 <app-input
+  [label]="inputHelper.getLabels(key)"
   *ngFor="let key of objectKeys"
   [name]="key"
   [value]="contactDetails![key]"
